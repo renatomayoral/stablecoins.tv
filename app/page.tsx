@@ -33,116 +33,63 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableCaption,
 } from "@/components/ui/table";
+
+import { Payment, columns } from "@/components/columns";
 import { Badge } from "@/components/ui/badge";
 
 const data: Payment[] = [
   {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
+    id: 23,
+    name: "USDT",
+    symbol: "usdt",
+    market_time: "new Date()",
+    chain: "ethereum",
+    price: 1.00042,
+    price_percent_change_1h: 0.0001,
+    price_percent_change_24h: 0.0002,
+    price_percent_change_7d: 0.0003,
+    price_percent_change_30d: 0.0004,
+    price_percent_change_60d: 0.0005,
+    price_percent_change_90d: 0.0006,
+    market_cap: 1000000000,
+    amount: 1000000000,
+    skynet_score: 0.97,
   },
   {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
+    id: 23124,
+    name: "USDC",
+    symbol: "usdc",
+    market_time: "new Date()",
+    chain: "arbitrum",
+    price: 1.04042,
+    price_percent_change_1h: 0.0021,
+    price_percent_change_24h: 0.02302,
+    price_percent_change_7d: 0.00033,
+    price_percent_change_30d: 0.00234,
+    price_percent_change_60d: 0.00055,
+    price_percent_change_90d: 0.00556,
+    market_cap: 7000000,
+    amount: 7000000,
+    skynet_score: 0.96,
   },
   {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-];
-
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
-export const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    id: 132,
+    name: "USDX",
+    symbol: "usdx",
+    market_time: "new Date()",
+    chain: "base",
+    price: 1.000242,
+    price_percent_change_1h: 0.0041,
+    price_percent_change_24h: 0.0202,
+    price_percent_change_7d: 0.0503,
+    price_percent_change_30d: 0.0704,
+    price_percent_change_60d: 0.0005,
+    price_percent_change_90d: 0.0006,
+    market_cap: 9000000,
+    amount: 9000000,
+    skynet_score: 0.98,
   },
 ];
 
@@ -177,7 +124,7 @@ export default function Home() {
   return (
     <main>
       <div className="flex justify-center p-4 ">
-        <p className=" font-bold text-5xl text-white bg-red-400 rounded-2xl p-2">
+        <p className=" font-bold text-5xl text-white bg-linear-to-r from-cyan-500 to-blue-500 rounded-2xl p-2">
           USD Stablecoins
         </p>
       </div>
@@ -185,9 +132,11 @@ export default function Home() {
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter tokens..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+            value={
+              (table.getColumn("symbol")?.getFilterValue() as string) ?? ""
+            }
             onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
+              table.getColumn("symbol")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -220,12 +169,22 @@ export default function Home() {
         </div>
         <div className="rounded-md border">
           <Table>
+            <TableCaption>
+              <div className="flex justify-center space-x-2 mb-2">
+                <Badge>1% de-pegged </Badge>
+                <Badge variant="secondary">3% de-pegged</Badge>
+                <Badge variant="destructive">5% de-pegged</Badge>
+              </div>
+            </TableCaption>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead
+                        key={header.id}
+                        className="text-center align-middle"
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -246,7 +205,10 @@ export default function Home() {
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell
+                        key={cell.id}
+                        className="text-center align-middle"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
