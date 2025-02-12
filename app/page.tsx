@@ -123,11 +123,6 @@ export default function Home() {
 
   return (
     <main>
-      <div className="flex justify-center p-4 ">
-        <p className=" font-bold text-5xl text-white bg-linear-to-r from-cyan-500 to-blue-500 rounded-2xl p-2">
-          USD Stablecoins
-        </p>
-      </div>
       <div className="w-full max-w mx-auto p-4">
         <div className="flex items-center py-4">
           <Input
