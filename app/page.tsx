@@ -12,18 +12,21 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Heart } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -35,10 +38,13 @@ import {
   TableCaption,
 } from "@/components/ui/table";
 
-import { Payment, columns } from "@/components/columns";
+import { columns } from "@/components/columns";
 import { Badge } from "@/components/ui/badge";
 import Clipboard from "@/components/copy-button";
 import { values } from "../components/wallet-adress";
+import { Payment } from "@/config/types";
+import Link from "next/link";
+import Image from "next/image";
 
 export const data: Payment[] = [
   {
@@ -224,24 +230,14 @@ export default function Home() {
                 </TableRow>
               )}
             </TableBody>
-            <TableCaption>
-              <div className="flex-col justify-center py-6 space-y-1">
-                {values.map((item, index) => (
-                  <Clipboard
-                    key={index}
-                    wallet_adress={item.wallet_adress}
-                    logo={item.logo}
-                  />
-                ))}
-              </div>
-            </TableCaption>
           </Table>
         </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="flex items-center justify-evenly space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} row(s) selected.
           </div>
+
           <div className="space-x-2">
             <Button
               variant="outline"
@@ -259,6 +255,50 @@ export default function Home() {
             >
               Next
             </Button>
+          </div>
+        </div>
+        <div>
+          <Link
+            href="/"
+            className=" flex justify-center items-center md:space-x-2"
+          >
+            <div className="flex items-center">
+              <Image
+                src={"/Stablecoins.TV-Logo.svg"}
+                alt="Stablecoins TV Logo"
+                width={150}
+                height={50}
+              />
+            </div>
+          </Link>
+        </div>
+        <div className="flex justify-center text-center">
+          <div className="flex-col justify-center space-y-1 w-[450px]">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <p className="p-4 font-bold text-center text-2xl">
+                    Don
+                    <Heart className="inline-block size-4 text-red-500 fill-red-500" />
+                    tion
+                  </p>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    Donations priority is for improving API calls with
+                    professionals providers until reaching the goal of update
+                    market data every second.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            {values.map((item, index) => (
+              <Clipboard
+                key={index}
+                wallet_adress={item.wallet_adress}
+                logo={item.logo}
+              />
+            ))}
           </div>
         </div>
       </div>

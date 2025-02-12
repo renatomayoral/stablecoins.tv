@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import Image from "next/image";
 
 type ClipboardProps = {
   wallet_adress: string;
-  logo: React.ReactNode; // Add a prop for the SVG logo
+  logo: string; // Add a prop for the SVG logo
 };
 
 const Clipboard: React.FC<ClipboardProps> = ({ wallet_adress, logo }) => {
@@ -20,15 +21,15 @@ const Clipboard: React.FC<ClipboardProps> = ({ wallet_adress, logo }) => {
     }
   };
   return (
-    <div className="mx-auto w-full max-w-[400px]">
+    <div className="mx-auto w-full">
       <div className="relative flex items-center">
-        {logo && <div className="mr-2">{logo}</div>}{" "}
+        <Image className="m-1" src={logo} alt="Logo" width={24} height={24} />
         <Input
           type="text"
           ref={inputRef}
           value={wallet_adress}
           readOnly
-          className="h-8 w-full rounded-lg border py-3 pl-5 pr-14 text-dark duration-200"
+          className="h-8 w-full rounded-lg border py-1 pl-2 text-dark duration-200"
         />
         <Button
           onClick={copyToClipboard}
