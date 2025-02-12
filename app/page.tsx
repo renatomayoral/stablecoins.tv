@@ -12,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Copy, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -34,10 +34,12 @@ import {
   TableHeader,
   TableRow,
   TableCaption,
+  TableFooter,
 } from "@/components/ui/table";
 
 import { Payment, columns } from "@/components/columns";
 import { Badge } from "@/components/ui/badge";
+import Clipboard from "@/components/copy-button";
 
 const data: Payment[] = [
   {
@@ -223,6 +225,15 @@ export default function Home() {
                 </TableRow>
               )}
             </TableBody>
+
+            <TableCaption>
+              <div className="flex-col justify-center p-4">
+                <Clipboard />
+
+                <p>1% de-pegged </p>
+                <p>1% de-pegged </p>
+              </div>
+            </TableCaption>
           </Table>
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
