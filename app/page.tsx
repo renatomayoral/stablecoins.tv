@@ -12,10 +12,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Copy, MoreHorizontal } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -34,14 +33,14 @@ import {
   TableHeader,
   TableRow,
   TableCaption,
-  TableFooter,
 } from "@/components/ui/table";
 
 import { Payment, columns } from "@/components/columns";
 import { Badge } from "@/components/ui/badge";
 import Clipboard from "@/components/copy-button";
+import { values } from "../components/wallet-adress";
 
-const data: Payment[] = [
+export const data: Payment[] = [
   {
     id: 23,
     name: "USDT",
@@ -225,13 +224,15 @@ export default function Home() {
                 </TableRow>
               )}
             </TableBody>
-
             <TableCaption>
-              <div className="flex-col justify-center p-4">
-                <Clipboard />
-
-                <p>1% de-pegged </p>
-                <p>1% de-pegged </p>
+              <div className="flex-col justify-center py-6 space-y-1">
+                {values.map((item, index) => (
+                  <Clipboard
+                    key={index}
+                    wallet_adress={item.wallet_adress}
+                    logo={item.logo}
+                  />
+                ))}
               </div>
             </TableCaption>
           </Table>
