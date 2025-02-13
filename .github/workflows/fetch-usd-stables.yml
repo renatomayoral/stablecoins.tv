@@ -18,11 +18,8 @@ jobs:
         with:
           node-version: "22.11.0"
 
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile"
+      - name: Install npm dependencies
+        run: npm install
 
       - name: Run Prisma seed
         run: npx prisma db seed
