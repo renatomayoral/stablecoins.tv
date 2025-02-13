@@ -19,13 +19,7 @@ jobs:
           node-version: "22.11.0"
 
       - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Install ts-node globally
-        run: npm install -g ts-node
+        run: npm install
 
       - name: Run fetchStablecoins
-        run: ts-node ./prisma/seed.ts
+        run: tsx ./prisma/seed.ts
