@@ -1,5 +1,8 @@
-import prisma from "../lib/prisma";
 import { StablecoinData } from "../config/types";
+
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 async function fetchStablecoins(): Promise<StablecoinData> {
   const response = await fetch(
