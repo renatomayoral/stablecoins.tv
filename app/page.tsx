@@ -1,7 +1,6 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -46,60 +45,6 @@ import { Payment } from "@/config/types";
 import Link from "next/link";
 import Image from "next/image";
 
-export const data: Payment[] = [
-  {
-    id: 23,
-    name: "USDT",
-    symbol: "usdt",
-    market_time: "new Date()",
-    chain: "ethereum",
-    price: 1.00042,
-    price_percent_change_1h: 0.0001,
-    price_percent_change_24h: 0.0002,
-    price_percent_change_7d: 0.0003,
-    price_percent_change_30d: 0.0004,
-    price_percent_change_60d: 0.0005,
-    price_percent_change_90d: 0.0006,
-    market_cap: 1000000000,
-    amount: 1000000000,
-    skynet_score: 0.97,
-  },
-  {
-    id: 23124,
-    name: "USDC",
-    symbol: "usdc",
-    market_time: "new Date()",
-    chain: "arbitrum",
-    price: 1.04042,
-    price_percent_change_1h: 0.0021,
-    price_percent_change_24h: 0.02302,
-    price_percent_change_7d: 0.00033,
-    price_percent_change_30d: 0.00234,
-    price_percent_change_60d: 0.00055,
-    price_percent_change_90d: 0.00556,
-    market_cap: 7000000,
-    amount: 7000000,
-    skynet_score: 0.96,
-  },
-  {
-    id: 132,
-    name: "USDX",
-    symbol: "usdx",
-    market_time: "new Date()",
-    chain: "base",
-    price: 1.000242,
-    price_percent_change_1h: 0.0041,
-    price_percent_change_24h: 0.0202,
-    price_percent_change_7d: 0.0503,
-    price_percent_change_30d: 0.0704,
-    price_percent_change_60d: 0.0005,
-    price_percent_change_90d: 0.0006,
-    market_cap: 9000000,
-    amount: 9000000,
-    skynet_score: 0.98,
-  },
-];
-
 export default function Home() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -108,6 +53,28 @@ export default function Home() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [data, setData] = React.useState<Payment[]>([]); // Initialize data as an empty array
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
+
+  useEffect(() => {
+    async function fetchCoins() {
+      setIsLoading(true); // Set loading to true before fetching data
+      try {
+        const response = await fetch("/api/stablecoins");
+        const coinsData = await response.json();
+        console.log("Fetched coins:", coinsData);
+        setData(coinsData);
+      } catch (error) {
+        console.error("Failed to fetch coins:", error);
+      } finally {
+        setIsLoading(false); // Set loading to false after fetching data
+      }
+    }
+    fetchCoins();
+    const intervalId = setInterval(fetchCoins, 600000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId); // Clean up interval on unmount
+  }, []);
 
   const table = useReactTable({
     data,
@@ -120,6 +87,11 @@ export default function Home() {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    initialState: {
+      pagination: {
+        pageSize: 50, // Set the default number of rows to 50
+      },
+    },
     state: {
       sorting,
       columnFilters,
@@ -200,17 +172,23 @@ export default function Home() {
               ))}
             </TableHeader>
             <TableBody>
-              {table.getRowModel().rows?.length ? (
+              {isLoading ? ( // Show loading message if isLoading is true
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    Loading...
+                  </TableCell>
+                </TableRow>
+              ) : table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className="text-center align-middle"
-                      >
+                      <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()

@@ -8,11 +8,6 @@ import { Payment } from "@/config/types";
 
 export const columns: ColumnDef<Payment>[] = [
   {
-    accessorKey: "id",
-    header: "CMC ID",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("id")}</div>,
-  },
-  {
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
@@ -25,17 +20,10 @@ export const columns: ColumnDef<Payment>[] = [
     ),
   },
   {
-    accessorKey: "market_time",
-    header: "Market Time",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("market_time")}</div>
-    ),
-  },
-  {
-    accessorKey: "chain",
+    accessorKey: "platform",
     header: "Chain",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("chain")}</div>
+      <div className="capitalize">{row.getValue("platform")}</div>
     ),
   },
   {
@@ -132,22 +120,6 @@ export const columns: ColumnDef<Payment>[] = [
     cell: ({ row }) => (
       <div className="lowercase">{row.getValue("skynet_score")}</div>
     ),
-  },
-
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
   {
     accessorKey: "amount",
