@@ -25,7 +25,7 @@ jobs:
         run: pnpm install
 
       - name: Install ts-node globally
-        run: pnpm install -g ts-node
+        run: npm install -g ts-node
 
       - name: Run fetchStablecoins
         run: ts-node ./prisma/seed.ts
