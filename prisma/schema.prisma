@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UsdStableMarketInfo {
+  id                Int      @id @default(autoincrement())
+  category_id       String
+  name              String
+  title             String
+  description       String
+  num_tokens        Int
+  last_updated      DateTime
+  avg_price_change  Float
+  market_cap        Float
+  market_cap_change Float
+  volume            Float
+  volume_change     Float
+  coins             Coin[]
+}
+
+model Coin {
+  id                     Int                  @id @default(autoincrement())
+  cmc_id                 Int
+  name                   String
+  symbol                 String
+  slug                   String
+  num_market_pairs       Int
+  date_added             DateTime
+  tags                   String[]
+  max_supply             Float?
+  circulating_supply     Float
+  total_supply           Float
+  platform               Platform?            @relation(fields: [platformId], references: [id])
+  platformId             Int?
+  is_active              Int?
+  infinite_supply        Boolean
+  cmc_rank               Int?
+  is_fiat                Int
+  last_updated           DateTime
+  usd_quote              Quote?               @relation(fields: [usdQuoteId], references: [id])
+  usdQuoteId             Int                  @unique
+  usdStableMarketInfo    UsdStableMarketInfo? @relation(fields: [usdStablecMarketInfoId], references: [id])
+  usdStablecMarketInfoId Int
+  tokenomics             Tokenomics?          @relation(fields: [tokenomicsId], references: [id])
+  tokenomicsId           Int?
+}
+
+model Platform {
+  id            Int    @id @default(autoincrement())
+  name          String
+  symbol        String
+  token_address String
+  coins         Coin[]
+}
+
+model Quote {
+  id                       Int      @id @default(autoincrement())
+  price                    Float?
+  volume_24h               Float?
+  volume_change_24h        Float?
+  percent_change_1h        Float?
+  percent_change_24h       Float?
+  percent_change_7d        Float?
+  percent_change_30d       Float?
+  percent_change_60d       Float?
+  percent_change_90d       Float?
+  market_cap               Float?
+  market_cap_dominance     Float?
+  fully_diluted_market_cap Float?
+  coin                     Coin?
+  coinId                   Int?
+  last_updated             DateTime
+
+  @@unique([price, last_updated])
+}
+
+model Tokenomics {
+  id                 Int     @id @default(autoincrement())
+  overview           String?
+  technology         String?
+  tokenomics         String?
+  roadmap            String?
+  community_and_team String?
+  Coin               Coin[]
+}
