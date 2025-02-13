@@ -28,5 +28,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Generate Prisma client
+        run: npx prisma generate
+
       - name: Run Prisma seed
         run: npx prisma db seed
