@@ -25,4 +25,4 @@ jobs:
         run: pnpm install
 
       - name: Run fetchStablecoins
-        run: node ./prisma/seed.js
+        run: ts-node ./prisma/seed.ts
