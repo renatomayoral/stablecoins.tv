@@ -41,7 +41,7 @@ import { columns } from "@/components/columns";
 import { Badge } from "@/components/ui/badge";
 import Clipboard from "@/components/copy-button";
 import { values } from "../components/wallet-adress";
-import { Payment } from "@/config/types";
+import { Coin } from "@/config/types";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -53,7 +53,7 @@ export default function Home() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [data, setData] = React.useState<Payment[]>([]); // Initialize data as an empty array
+  const [data, setData] = React.useState<Coin[]>([]); // Initialize data as an empty array
   const [isLoading, setIsLoading] = useState(true); // Add loading state
 
   useEffect(() => {
@@ -99,6 +99,7 @@ export default function Home() {
       rowSelection,
     },
   });
+  console.log(table.getState().sorting);
 
   return (
     <main>
