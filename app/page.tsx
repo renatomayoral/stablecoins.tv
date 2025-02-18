@@ -103,7 +103,22 @@ export default function Home() {
 
   return (
     <main>
-      <div className="w-full max-w mx-auto p-4">
+      <div className="w-full max-w mx-auto pb-4">
+        <div>
+          <Link
+            href="/"
+            className=" flex justify-center items-center md:space-x-2"
+          >
+            <div className="flex items-center">
+              <Image
+                src={"/Stablecoins.TV-Logo.svg"}
+                alt="Stablecoins TV Logo"
+                width={150}
+                height={50}
+              />
+            </div>
+          </Link>
+        </div>
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter tokens..."
@@ -183,21 +198,35 @@ export default function Home() {
                   </TableCell>
                 </TableRow>
               ) : table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
+                table.getRowModel().rows.map((row) => {
+                  const currentPrice = row.original.current_price;
+                  const percentageDifference =
+                    Math.abs((currentPrice - 1) / 1) * 100;
+                  let rowClassName = "";
+
+                  if (percentageDifference > 1 && percentageDifference < 5) {
+                    rowClassName = "bg-yellow-100";
+                  } else if (percentageDifference >= 5) {
+                    rowClassName = "bg-red-200";
+                  }
+
+                  return (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      className={rowClassName}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })
               ) : (
                 <TableRow>
                   <TableCell
@@ -236,31 +265,30 @@ export default function Home() {
             </Button>
           </div>
         </div>
-        <div>
-          <Link
-            href="/"
-            className=" flex justify-center items-center md:space-x-2"
-          >
-            <div className="flex items-center">
-              <Image
-                src={"/Stablecoins.TV-Logo.svg"}
-                alt="Stablecoins TV Logo"
-                width={150}
-                height={50}
-              />
-            </div>
-          </Link>
-        </div>
         <div className="flex justify-center text-center">
           <div className="flex-col justify-center space-y-1 w-[450px]">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <p className="p-4 font-bold text-center text-2xl">
-                    Don
-                    <Heart className="inline-block size-4 text-red-500 fill-red-500" />
-                    tion
-                  </p>
+                  <div className=" flex flex-col justify-center items-center font-bold text-center text-2xl">
+                    <span className="p-4">
+                      Don
+                      <Heart className="inline-block size-4 text-red-500 fill-red-500" />
+                      tion
+                    </span>
+                    <a
+                      href="https://nowpayments.io/donation?api_key=S22MP6A-FYV4X73-N6YJ7S2-K3NDZSP"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      <Image
+                        src="https://nowpayments.io/images/embeds/donation-button-white.svg"
+                        alt="Cryptocurrency & Bitcoin donation button by NOWPayments"
+                        width={150}
+                        height={150}
+                      />
+                    </a>
+                  </div>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>
@@ -271,13 +299,6 @@ export default function Home() {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            {values.map((item, index) => (
-              <Clipboard
-                key={index}
-                wallet_adress={item.wallet_adress}
-                logo={item.logo}
-              />
-            ))}
           </div>
         </div>
       </div>

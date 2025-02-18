@@ -76,7 +76,7 @@ export const columns: ColumnDef<Coin>[] = [
     cell: ({ row }) => {
       const usd_quote = row.original.current_price;
       return (
-        <div className="capitalize">
+        <div className="capitalize flex justify-center">
           {usd_quote ? usdPriceFormatter.format(usd_quote) : "N/A"}
         </div>
       );
@@ -88,7 +88,7 @@ export const columns: ColumnDef<Coin>[] = [
     cell: ({ row }) => {
       const ath = row.original.ath;
       return (
-        <div className="capitalize">
+        <div className="capitalize flex justify-center">
           {ath ? usdPriceFormatter.format(ath) : ""}
         </div>
       );
@@ -100,7 +100,7 @@ export const columns: ColumnDef<Coin>[] = [
     cell: ({ row }) => {
       const atl = row.original.atl;
       return (
-        <div className="capitalize">
+        <div className="capitalize flex justify-center">
           {atl ? usdPriceFormatter.format(atl) : ""}
         </div>
       );
@@ -122,7 +122,7 @@ export const columns: ColumnDef<Coin>[] = [
           ? "text-red-500"
           : "";
       return (
-        <div className={`capitalize ${textColor}`}>
+        <div className={`capitalize flex justify-center ${textColor}`}>
           {price_change_percentage_1h_in_currency
             ? percentFormatter.format(
                 price_change_percentage_1h_in_currency / 100
@@ -148,7 +148,7 @@ export const columns: ColumnDef<Coin>[] = [
           ? "text-red-500"
           : "";
       return (
-        <div className={`capitalize ${textColor}`}>
+        <div className={`capitalize flex justify-center ${textColor}`}>
           {price_change_percentage_24h_in_currency
             ? percentFormatter.format(
                 price_change_percentage_24h_in_currency / 100
@@ -174,7 +174,7 @@ export const columns: ColumnDef<Coin>[] = [
           ? "text-red-500"
           : "";
       return (
-        <div className={`capitalize ${textColor}`}>
+        <div className={`flex justify-center capitalize ${textColor}`}>
           {price_change_percentage_7d_in_currency
             ? percentFormatter.format(
                 price_change_percentage_7d_in_currency / 100
@@ -200,7 +200,7 @@ export const columns: ColumnDef<Coin>[] = [
           ? "text-red-500"
           : "";
       return (
-        <div className={`capitalize ${textColor}`}>
+        <div className={`capitalize flex justify-center ${textColor}`}>
           {price_change_percentage_14d_in_currency
             ? percentFormatter.format(
                 price_change_percentage_14d_in_currency / 100
@@ -226,7 +226,7 @@ export const columns: ColumnDef<Coin>[] = [
           ? "text-red-500"
           : "";
       return (
-        <div className={`capitalize ${textColor}`}>
+        <div className={`capitalize flex justify-center ${textColor}`}>
           {price_change_percentage_30d_in_currency
             ? percentFormatter.format(
                 price_change_percentage_30d_in_currency / 100
@@ -252,7 +252,7 @@ export const columns: ColumnDef<Coin>[] = [
           ? "text-red-500"
           : "";
       return (
-        <div className={`capitalize ${textColor}`}>
+        <div className={`capitalize flex justify-center ${textColor}`}>
           {price_change_percentage_200d_in_currency
             ? percentFormatter.format(
                 price_change_percentage_200d_in_currency / 100
@@ -278,7 +278,7 @@ export const columns: ColumnDef<Coin>[] = [
           ? "text-red-500"
           : "";
       return (
-        <div className={`capitalize ${textColor}`}>
+        <div className={`capitalize flex justify-center ${textColor}`}>
           {price_change_percentage_1y_in_currency
             ? percentFormatter.format(
                 price_change_percentage_1y_in_currency / 100
@@ -306,7 +306,7 @@ export const columns: ColumnDef<Coin>[] = [
     cell: ({ row }) => {
       const total_volume = row.original.total_volume;
       return (
-        <div className="capitalize">
+        <div className="capitalize flex justify-center">
           {total_volume ? usdMarketCapFormatter.format(total_volume) : ""}
         </div>
       );
@@ -330,7 +330,7 @@ export const columns: ColumnDef<Coin>[] = [
     cell: ({ row }) => {
       const market_cap = row.original.market_cap;
       return (
-        <div className="capitalize">
+        <div className="flex justify-center capitalize">
           {market_cap ? usdMarketCapFormatter.format(market_cap) : "N/A"}
         </div>
       );

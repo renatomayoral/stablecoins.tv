@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 
 async function fetchStablecoins(): Promise<Coin[]> {
   const response = await fetch(
-    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=stablecoins&per_page=100&sparkline=true&price_change_percentage=1h%2C24h%2C7d%2C14d%2C30d%2C200d%2C1y&precision=5",
+    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=usd-stablecoin&per_page=100&sparkline=true&price_change_percentage=1h%2C24h%2C7d%2C14d%2C30d%2C200d%2C1y&precision=5",
     {
       method: "GET",
       headers: {accept: 'application/json', 'x-cg-demo-api-key': 'CG-LHi8StpU6p6ZGuyAu9WxQ8or'}
