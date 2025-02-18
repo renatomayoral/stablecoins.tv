@@ -13,6 +13,7 @@ async function fetchStablecoins(): Promise<Coin[]> {
     },
   );
   const data = await response.json();
+  console.log(data);
   return data;
 }
 
