@@ -25,14 +25,14 @@ model UsdStableMarketInfo {
 
 model Coin {
   id                                       Int                  @id @default(autoincrement())
-  cg_id                                    String
+  cg_id                                    String               @unique
   symbol                                   String
   name                                     String
   image                                    String
   current_price                            Float
-  market_cap                               BigInt
+  market_cap                               Float
   market_cap_rank                          Int?
-  fully_diluted_valuation                  BigInt?
+  fully_diluted_valuation                  Float?
   total_volume                             Float?
   high_24h                                 Float?
   low_24h                                  Float?
@@ -60,8 +60,8 @@ model Coin {
   price_change_percentage_200d_in_currency Float?
   price_change_percentage_1y_in_currency   Float?
   platform                                 String?
-  usdStableMarketInfo                      UsdStableMarketInfo? @relation(fields: [usdStablecMarketInfoId], references: [id])
-  usdStablecMarketInfoId                   Int
+  usdStableMarketInfo                      UsdStableMarketInfo? @relation(fields: [usdStableMarketInfoId], references: [id])
+  usdStableMarketInfoId                    Int?
   tokenomics                               Tokenomics?          @relation(fields: [tokenomicsId], references: [id])
   tokenomicsId                             Int?
 }

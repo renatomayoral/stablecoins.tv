@@ -62,7 +62,7 @@ export default function Home() {
       try {
         const response = await fetch("/api/stablecoins");
         const coinsData = await response.json();
-        console.log("Fetched coins:", coinsData);
+        console.log("Fetched coins:", response);
         setData(coinsData);
       } catch (error) {
         console.error("Failed to fetch coins:", error);

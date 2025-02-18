@@ -7,14 +7,7 @@ export default async function handler(
 ) {
   if (req.method === 'GET') {
     try {
-      const coins = await prisma.coin.findMany({
-        include: {
-          platform: true,
-          usd_quote: true,
-          usdStableMarketInfo: true,
-          tokenomics: true,
-        },
-      });
+      const coins = await prisma.coin.findMany();
       res.status(200).json(coins);
     } catch (error) {
       console.error('Failed to fetch coins:', error);

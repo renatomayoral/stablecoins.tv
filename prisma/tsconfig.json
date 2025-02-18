@@ -7,5 +7,5 @@
       "strict": true,
       "outDir": "dist"
     },
-    "include": ["seed-cmc.ts"]
+    "include": ["seed.ts"]
   }

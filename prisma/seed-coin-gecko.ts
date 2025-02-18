@@ -13,7 +13,6 @@ async function fetchStablecoins(): Promise<Coin[]> {
     },
   );
   const data = await response.json();
-  console.log("Fetched Coin Gecko stablecoins:", data);
   return data;
 }
 
@@ -22,17 +21,18 @@ async function seedStablecoins() {
     const stablecoinData: Coin[] = await fetchStablecoins();
     for (const stablecoin of stablecoinData) {
 
+
         // Create a single Coin entry
         await prisma.coin.upsert({
-          where: { id: stablecoin.id },
+          where: { cg_id: stablecoin.id },
           update: {
           symbol: stablecoin.symbol,
           name: stablecoin.name,
           image: stablecoin.image,
           current_price: stablecoin.current_price,
-          market_cap: BigInt(stablecoin.market_cap || 0),
+          market_cap: stablecoin.market_cap,
           market_cap_rank: stablecoin.market_cap_rank,
-          fully_diluted_valuation: stablecoin.fully_diluted_valuation ? BigInt(stablecoin.fully_diluted_valuation) : null,
+          fully_diluted_valuation: stablecoin.fully_diluted_valuation ? (stablecoin.fully_diluted_valuation) : null,
           total_volume: stablecoin.total_volume,
           high_24h: stablecoin.high_24h,
           low_24h: stablecoin.low_24h,
@@ -59,16 +59,18 @@ async function seedStablecoins() {
           price_change_percentage_30d_in_currency: stablecoin.price_change_percentage_30d_in_currency,
           price_change_percentage_200d_in_currency: stablecoin.price_change_percentage_200d_in_currency,
           price_change_percentage_1y_in_currency: stablecoin.price_change_percentage_1y_in_currency,
+          usdStableMarketInfoId: null, // Assuming you have a default UsdStableMarketInfo with id 1
+          tokenomicsId: null, // Assuming you don't have tokenomics data yet
         },
         create: {
-          cg_id: stablecoin.cg_id,
+          cg_id: stablecoin.id,
           symbol: stablecoin.symbol,
           name: stablecoin.name,
           image: stablecoin.image,
           current_price: stablecoin.current_price,
-          market_cap: BigInt(stablecoin.market_cap || 0),
+          market_cap: stablecoin.market_cap,
           market_cap_rank: stablecoin.market_cap_rank,
-          fully_diluted_valuation: stablecoin.fully_diluted_valuation ? BigInt(stablecoin.fully_diluted_valuation) : null,
+          fully_diluted_valuation: stablecoin.fully_diluted_valuation ? stablecoin.fully_diluted_valuation : null,
           total_volume: stablecoin.total_volume,
           high_24h: stablecoin.high_24h,
           low_24h: stablecoin.low_24h,
@@ -95,9 +97,10 @@ async function seedStablecoins() {
           price_change_percentage_30d_in_currency: stablecoin.price_change_percentage_30d_in_currency,
           price_change_percentage_200d_in_currency: stablecoin.price_change_percentage_200d_in_currency,
           price_change_percentage_1y_in_currency: stablecoin.price_change_percentage_1y_in_currency,
+          usdStableMarketInfoId: null, // Assuming you have a default UsdStableMarketInfo with id 1
+          tokenomicsId: null, // Assuming you don't have tokenomics data yet
         },
       });
-      console.log(`Upserted coin: ${stablecoin.name}`);
     }
   } catch (e) {
     console.error("Seeding failed:", e);
