@@ -1,12 +1,11 @@
 "use client";
 import React from "react";
-import { ColumnDef, SortingFn } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Coin } from "@/config/types";
 import Image from "next/image";
-import { LineDaysChart } from "./line-chart";
 
 const usdPriceFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -299,7 +298,7 @@ export const columns: ColumnDef<Coin>[] = [
         </Button>
       );
     },
-    sortingFn: (rowA, rowB, columnId) => {
+    sortingFn: (rowA, rowB) => {
       const a = rowA.original.total_volume || 0;
       const b = rowB.original.total_volume || 0;
       return a - b;
@@ -323,7 +322,7 @@ export const columns: ColumnDef<Coin>[] = [
         </Button>
       );
     },
-    sortingFn: (rowA, rowB, columnId) => {
+    sortingFn: (rowA, rowB) => {
       const a = rowA.original.market_cap || 0;
       const b = rowB.original.market_cap || 0;
       return a - b;

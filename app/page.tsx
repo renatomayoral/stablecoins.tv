@@ -39,7 +39,6 @@ import {
 
 import { columns } from "@/components/columns";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Coin } from "@/config/types";
 import Link from "next/link";
 import Image from "next/image";
