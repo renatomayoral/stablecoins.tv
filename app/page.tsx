@@ -39,11 +39,11 @@ import {
 
 import { columns } from "@/components/columns";
 import { Badge } from "@/components/ui/badge";
-import Clipboard from "@/components/copy-button";
-import { values } from "../components/wallet-adress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Coin } from "@/config/types";
 import Link from "next/link";
 import Image from "next/image";
+import { SkeletonTable } from "@/components/skeleton-table";
 
 export default function Home() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -62,7 +62,6 @@ export default function Home() {
       try {
         const response = await fetch("/api/stablecoins");
         const coinsData = await response.json();
-        console.log("Fetched coins:", response);
         setData(coinsData);
       } catch (error) {
         console.error("Failed to fetch coins:", error);
@@ -99,7 +98,6 @@ export default function Home() {
       rowSelection,
     },
   });
-  console.log(table.getState().sorting);
 
   return (
     <main>
@@ -114,7 +112,9 @@ export default function Home() {
                 src={"/Stablecoins.TV-Logo.svg"}
                 alt="Stablecoins TV Logo"
                 width={150}
-                height={50}
+                height={100}
+                priority
+                style={{ width: "auto", height: "150px" }} // Add style attribute
               />
             </div>
           </Link>
@@ -188,15 +188,8 @@ export default function Home() {
               ))}
             </TableHeader>
             <TableBody>
-              {isLoading ? ( // Show loading message if isLoading is true
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    Loading...
-                  </TableCell>
-                </TableRow>
+              {isLoading ? (
+                <SkeletonTable columns={columns.length} />
               ) : table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => {
                   const currentPrice = row.original.current_price;
@@ -204,9 +197,9 @@ export default function Home() {
                     Math.abs((currentPrice - 1) / 1) * 100;
                   let rowClassName = "";
 
-                  if (percentageDifference > 1 && percentageDifference < 5) {
+                  if (percentageDifference > 0.5 && percentageDifference < 3) {
                     rowClassName = "bg-yellow-100";
-                  } else if (percentageDifference >= 5) {
+                  } else if (percentageDifference >= 3) {
                     rowClassName = "bg-red-200";
                   }
 
@@ -241,11 +234,6 @@ export default function Home() {
           </Table>
         </div>
         <div className="flex items-center justify-evenly space-x-2 py-4">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-
           <div className="space-x-2">
             <Button
               variant="outline"

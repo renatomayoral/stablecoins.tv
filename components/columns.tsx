@@ -43,6 +43,7 @@ export const columns: ColumnDef<Coin>[] = [
               alt={name}
               width={16}
               height={16}
+              style={{ width: "auto", height: "auto" }} // Add style attribute
               className="rounded-full"
             />
           </div>
@@ -332,27 +333,6 @@ export const columns: ColumnDef<Coin>[] = [
       return (
         <div className="flex justify-center capitalize">
           {market_cap ? usdMarketCapFormatter.format(market_cap) : "N/A"}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "market_cap_dominance",
-    header: ({ column }) => {
-      return (
-        <Button variant="ghost" onClick={() => column.toggleSorting()}>
-          Last 7 Days <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const sparkline_in_7d = row.original.sparkline_in_7d;
-      const chartData =
-        sparkline_in_7d?.price.map((price: number) => ({ price })) || [];
-      console.log(chartData);
-      return (
-        <div className="capitalize flex items-center justify-center">
-          <LineDaysChart chartData={chartData} />
         </div>
       );
     },

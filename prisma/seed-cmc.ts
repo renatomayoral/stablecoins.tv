@@ -15,7 +15,6 @@ async function fetchStablecoins(): Promise<StablecoinData> {
     },
   );
   const data = await response.json();
-  console.log("Fetched stablecoins:", data);
   return data.data;
 }
 
@@ -172,7 +171,6 @@ async function seedStablecoins() {
           },
         });
 
-        console.log("Upserted a single coin:", coin);
       } else {
         console.warn(
           `Skipping quote with null price for coin: ${stablecoin.name}`,
