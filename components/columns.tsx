@@ -5,6 +5,8 @@ import { ColumnDef, SortingFn } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Coin } from "@/config/types";
+import Image from "next/image";
+import { LineDaysChart } from "./line-chart";
 
 const usdPriceFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -30,35 +32,76 @@ export const columns: ColumnDef<Coin>[] = [
   {
     accessorKey: "name",
     header: "Name",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-  },
-  {
-    accessorKey: "symbol",
-    header: "Symbol",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("symbol")}</div>
-    ),
-  },
-  {
-    accessorKey: "platform",
-    header: "Chain",
     cell: ({ row }) => {
-      const platform = row.original.platform;
+      const image = row.original.image;
+      const name = row.original.name;
       return (
-        <div className="capitalize">
-          {platform ? `${platform.name} (${platform.symbol})` : "N/A"}
+        <div className="capitalize flex items-center justify-center">
+          <div className="mr-1">
+            <Image
+              src={image}
+              alt={name}
+              width={16}
+              height={16}
+              className="rounded-full"
+            />
+          </div>
+          <p className=" font-semibold">{name ? `${name}` : "N/A"}</p>
         </div>
       );
     },
   },
   {
+    accessorKey: "symbol",
+    header: "Symbol",
+    cell: ({ row }) => (
+      <div className="capitalize flex justify-center">
+        {row.getValue("symbol")}
+      </div>
+    ),
+  },
+  /*  {
+    accessorKey: "platform",
+    header: "Chain",
+    cell: ({ row }) => {
+      const platform = row.original.platform;
+      return (
+        <div className="capitalize">{platform ? `${platform}` : "N/A"}</div>
+      );
+    },
+  }, */
+  {
     accessorKey: "price",
     header: "Price",
     cell: ({ row }) => {
-      const usd_quote = row.original.usd_quote;
+      const usd_quote = row.original.current_price;
       return (
         <div className="capitalize">
-          {usd_quote ? usdPriceFormatter.format(usd_quote.price) : "N/A"}
+          {usd_quote ? usdPriceFormatter.format(usd_quote) : "N/A"}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "ath",
+    header: "ATH",
+    cell: ({ row }) => {
+      const ath = row.original.ath;
+      return (
+        <div className="capitalize">
+          {ath ? usdPriceFormatter.format(ath) : ""}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "atl",
+    header: "ATL",
+    cell: ({ row }) => {
+      const atl = row.original.atl;
+      return (
+        <div className="capitalize">
+          {atl ? usdPriceFormatter.format(atl) : ""}
         </div>
       );
     },
@@ -67,8 +110,11 @@ export const columns: ColumnDef<Coin>[] = [
     accessorKey: "price_percent_change_1h",
     header: "% 1H",
     cell: ({ row }) => {
-      const usd_quote = row.original.usd_quote;
-      const percentChange = usd_quote ? usd_quote.percent_change_1h : 0;
+      const price_change_percentage_1h_in_currency =
+        row.original.price_change_percentage_1h_in_currency;
+      const percentChange = price_change_percentage_1h_in_currency
+        ? price_change_percentage_1h_in_currency
+        : 0;
       const textColor =
         percentChange > 0
           ? "text-green-500"
@@ -77,9 +123,11 @@ export const columns: ColumnDef<Coin>[] = [
           : "";
       return (
         <div className={`capitalize ${textColor}`}>
-          {usd_quote
-            ? percentFormatter.format(usd_quote.percent_change_1h / 100)
-            : "N/A"}
+          {price_change_percentage_1h_in_currency
+            ? percentFormatter.format(
+                price_change_percentage_1h_in_currency / 100
+              )
+            : ""}
         </div>
       );
     },
@@ -88,8 +136,11 @@ export const columns: ColumnDef<Coin>[] = [
     accessorKey: "price_percent_change_24h",
     header: "% 24H",
     cell: ({ row }) => {
-      const usd_quote = row.original.usd_quote;
-      const percentChange = usd_quote ? usd_quote.percent_change_24h : 0;
+      const price_change_percentage_24h_in_currency =
+        row.original.price_change_percentage_24h_in_currency;
+      const percentChange = price_change_percentage_24h_in_currency
+        ? price_change_percentage_24h_in_currency
+        : 0;
       const textColor =
         percentChange > 0
           ? "text-green-500"
@@ -98,9 +149,11 @@ export const columns: ColumnDef<Coin>[] = [
           : "";
       return (
         <div className={`capitalize ${textColor}`}>
-          {usd_quote
-            ? percentFormatter.format(usd_quote.percent_change_24h / 100)
-            : "N/A"}
+          {price_change_percentage_24h_in_currency
+            ? percentFormatter.format(
+                price_change_percentage_24h_in_currency / 100
+              )
+            : ""}
         </div>
       );
     },
@@ -109,8 +162,11 @@ export const columns: ColumnDef<Coin>[] = [
     accessorKey: "price_percent_change_7d",
     header: "% 7D",
     cell: ({ row }) => {
-      const usd_quote = row.original.usd_quote;
-      const percentChange = usd_quote ? usd_quote.percent_change_7d : 0;
+      const price_change_percentage_7d_in_currency =
+        row.original.price_change_percentage_7d_in_currency;
+      const percentChange = price_change_percentage_7d_in_currency
+        ? price_change_percentage_7d_in_currency
+        : 0;
       const textColor =
         percentChange > 0
           ? "text-green-500"
@@ -119,9 +175,37 @@ export const columns: ColumnDef<Coin>[] = [
           : "";
       return (
         <div className={`capitalize ${textColor}`}>
-          {usd_quote
-            ? percentFormatter.format(usd_quote.percent_change_7d / 100)
-            : "N/A"}
+          {price_change_percentage_7d_in_currency
+            ? percentFormatter.format(
+                price_change_percentage_7d_in_currency / 100
+              )
+            : ""}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "price_percent_change_14d",
+    header: "% 14D",
+    cell: ({ row }) => {
+      const price_change_percentage_14d_in_currency =
+        row.original.price_change_percentage_14d_in_currency;
+      const percentChange = price_change_percentage_14d_in_currency
+        ? price_change_percentage_14d_in_currency
+        : 0;
+      const textColor =
+        percentChange > 0
+          ? "text-green-500"
+          : percentChange < 0
+          ? "text-red-500"
+          : "";
+      return (
+        <div className={`capitalize ${textColor}`}>
+          {price_change_percentage_14d_in_currency
+            ? percentFormatter.format(
+                price_change_percentage_14d_in_currency / 100
+              )
+            : ""}
         </div>
       );
     },
@@ -130,8 +214,11 @@ export const columns: ColumnDef<Coin>[] = [
     accessorKey: "price_percent_change_30d",
     header: "% 30D",
     cell: ({ row }) => {
-      const usd_quote = row.original.usd_quote;
-      const percentChange = usd_quote ? usd_quote.percent_change_30d : 0;
+      const price_change_percentage_30d_in_currency =
+        row.original.price_change_percentage_30d_in_currency;
+      const percentChange = price_change_percentage_30d_in_currency
+        ? price_change_percentage_30d_in_currency
+        : 0;
       const textColor =
         percentChange > 0
           ? "text-green-500"
@@ -140,19 +227,24 @@ export const columns: ColumnDef<Coin>[] = [
           : "";
       return (
         <div className={`capitalize ${textColor}`}>
-          {usd_quote
-            ? percentFormatter.format(usd_quote.percent_change_30d / 100)
-            : "N/A"}
+          {price_change_percentage_30d_in_currency
+            ? percentFormatter.format(
+                price_change_percentage_30d_in_currency / 100
+              )
+            : ""}
         </div>
       );
     },
   },
   {
-    accessorKey: "price_percent_change_60d",
-    header: "% 60D",
+    accessorKey: "price_percent_change_200d",
+    header: "% 200D",
     cell: ({ row }) => {
-      const usd_quote = row.original.usd_quote;
-      const percentChange = usd_quote ? usd_quote.percent_change_60d : 0;
+      const price_change_percentage_200d_in_currency =
+        row.original.price_change_percentage_200d_in_currency;
+      const percentChange = price_change_percentage_200d_in_currency
+        ? price_change_percentage_200d_in_currency
+        : 0;
       const textColor =
         percentChange > 0
           ? "text-green-500"
@@ -161,19 +253,24 @@ export const columns: ColumnDef<Coin>[] = [
           : "";
       return (
         <div className={`capitalize ${textColor}`}>
-          {usd_quote
-            ? percentFormatter.format(usd_quote.percent_change_60d / 100)
-            : "N/A"}
+          {price_change_percentage_200d_in_currency
+            ? percentFormatter.format(
+                price_change_percentage_200d_in_currency / 100
+              )
+            : ""}
         </div>
       );
     },
   },
   {
-    accessorKey: "price_percent_change_90d",
-    header: "% 90D",
+    accessorKey: "price_percent_change_1y",
+    header: "% 1Y",
     cell: ({ row }) => {
-      const usd_quote = row.original.usd_quote;
-      const percentChange = usd_quote ? usd_quote.percent_change_90d : 0;
+      const price_change_percentage_1y_in_currency =
+        row.original.price_change_percentage_1y_in_currency;
+      const percentChange = price_change_percentage_1y_in_currency
+        ? price_change_percentage_1y_in_currency
+        : 0;
       const textColor =
         percentChange > 0
           ? "text-green-500"
@@ -182,9 +279,35 @@ export const columns: ColumnDef<Coin>[] = [
           : "";
       return (
         <div className={`capitalize ${textColor}`}>
-          {usd_quote
-            ? percentFormatter.format(usd_quote.percent_change_90d / 100)
-            : "N/A"}
+          {price_change_percentage_1y_in_currency
+            ? percentFormatter.format(
+                price_change_percentage_1y_in_currency / 100
+              )
+            : ""}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "market_cap_change_24h",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting()}>
+          24h Volume
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    sortingFn: (rowA, rowB, columnId) => {
+      const a = rowA.original.total_volume || 0;
+      const b = rowB.original.total_volume || 0;
+      return a - b;
+    },
+    cell: ({ row }) => {
+      const total_volume = row.original.total_volume;
+      return (
+        <div className="capitalize">
+          {total_volume ? usdMarketCapFormatter.format(total_volume) : ""}
         </div>
       );
     },
@@ -200,17 +323,15 @@ export const columns: ColumnDef<Coin>[] = [
       );
     },
     sortingFn: (rowA, rowB, columnId) => {
-      const a = rowA.original.usd_quote?.market_cap || 0;
-      const b = rowB.original.usd_quote?.market_cap || 0;
+      const a = rowA.original.market_cap || 0;
+      const b = rowB.original.market_cap || 0;
       return a - b;
     },
     cell: ({ row }) => {
-      const usd_quote = row.original.usd_quote;
+      const market_cap = row.original.market_cap;
       return (
         <div className="capitalize">
-          {usd_quote
-            ? usdMarketCapFormatter.format(usd_quote.market_cap)
-            : "N/A"}
+          {market_cap ? usdMarketCapFormatter.format(market_cap) : "N/A"}
         </div>
       );
     },
@@ -220,16 +341,18 @@ export const columns: ColumnDef<Coin>[] = [
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting()}>
-          Stable Market Dominance
-          <ArrowUpDown />
+          Last 7 Days <ArrowUpDown />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const usd_quote = row.original.usd_quote;
+      const sparkline_in_7d = row.original.sparkline_in_7d;
+      const chartData =
+        sparkline_in_7d?.price.map((price: number) => ({ price })) || [];
+      console.log(chartData);
       return (
-        <div className="capitalize">
-          {usd_quote ? `${usd_quote.market_cap_dominance}` : "N/A"}
+        <div className="capitalize flex items-center justify-center">
+          <LineDaysChart chartData={chartData} />
         </div>
       );
     },

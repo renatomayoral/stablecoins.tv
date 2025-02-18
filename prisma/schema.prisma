@@ -71,6 +71,7 @@ model Tokenomics {
   overview           String?
   technology         String?
   tokenomics         String?
+  skynet_score       Float?
   roadmap            String?
   community_and_team String?
   Coin               Coin[]
