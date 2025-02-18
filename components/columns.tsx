@@ -301,7 +301,7 @@ export const columns: ColumnDef<Coin>[] = [
     sortingFn: (rowA, rowB) => {
       const a = rowA.original.total_volume || 0;
       const b = rowB.original.total_volume || 0;
-      return a - b;
+      return Number(a) - Number(b);
     },
     cell: ({ row }) => {
       const total_volume = row.original.total_volume;
@@ -325,7 +325,7 @@ export const columns: ColumnDef<Coin>[] = [
     sortingFn: (rowA, rowB) => {
       const a = rowA.original.market_cap || 0;
       const b = rowB.original.market_cap || 0;
-      return a - b;
+      return Number(a) - Number(b);
     },
     cell: ({ row }) => {
       const market_cap = row.original.market_cap;
