@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(_req: NextRequest, _res: NextResponse) {
   try {
     const coins = await prisma.coin.findMany();
     return NextResponse.json(coins, { status: 200 });
