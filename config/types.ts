@@ -9,14 +9,14 @@ export type Platform = {
   
 export type Coin = {
   id: number 
-  cg_id: string;
+  cg_id: string | number;
   symbol: string;
   name: string;
   image: string;
   current_price: number;
-  market_cap: bigint;
+  market_cap: number;
   market_cap_rank?: number | null;
-  fully_diluted_valuation?: bigint | null;
+  fully_diluted_valuation?: number | null;
   total_volume?: number | null;
   high_24h?: number | null;
   low_24h?: number | null;

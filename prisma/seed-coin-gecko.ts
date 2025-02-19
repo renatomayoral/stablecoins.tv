@@ -24,7 +24,7 @@ async function seedStablecoins() {
 
         // Create a single Coin entry
         await prisma.coin.upsert({
-          where: { cg_id: stablecoin.id },
+          where: { cg_id: stablecoin.id.toString() },
           update: {
           symbol: stablecoin.symbol,
           name: stablecoin.name,
@@ -63,7 +63,7 @@ async function seedStablecoins() {
           tokenomicsId: null, // Assuming you don't have tokenomics data yet
         },
         create: {
-          cg_id: stablecoin.id,
+          cg_id: stablecoin.id.toString(),
           symbol: stablecoin.symbol,
           name: stablecoin.name,
           image: stablecoin.image,
