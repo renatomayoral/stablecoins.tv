@@ -7,6 +7,6 @@ export const siteConfig = {
   url:
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://stablecoins.tv",
+      : "https://stablecoins-tv.vercel.app/",
   links: { github: "https://github.com/sadmann7/shadcn-table" },
 };

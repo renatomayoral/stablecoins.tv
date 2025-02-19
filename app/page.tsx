@@ -59,7 +59,9 @@ export default function Home() {
     async function fetchCoins() {
       setIsLoading(true); // Set loading to true before fetching data
       try {
-        const response = await fetch("/api/stablecoins");
+        const response = await fetch("/api/usd-stablecoins", {
+          method: "GET",
+        });
         const coinsData = await response.json();
         setData(coinsData);
       } catch (error) {
