@@ -3,29 +3,16 @@ import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
+import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
 import { Coin } from "@/config/types";
 import Image from "next/image";
-
-const usdPriceFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  minimumFractionDigits: 5,
-  maximumFractionDigits: 5,
-});
-
-const usdMarketCapFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
-});
-
-const percentFormatter = new Intl.NumberFormat("en-US", {
-  style: "percent",
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
+import {
+  usdPriceAllTimeFormatter,
+  usdMarketCapFormatter,
+  usdPriceFormatter,
+  percentFormatter,
+} from "@/lib/utils";
 
 export const columns: ColumnDef<Coin>[] = [
   {
@@ -89,7 +76,7 @@ export const columns: ColumnDef<Coin>[] = [
       const ath = row.original.ath;
       return (
         <div className="capitalize flex justify-center">
-          {ath ? usdPriceFormatter.format(ath) : ""}
+          {ath ? usdPriceAllTimeFormatter.format(ath) : ""}
         </div>
       );
     },
@@ -101,7 +88,7 @@ export const columns: ColumnDef<Coin>[] = [
       const atl = row.original.atl;
       return (
         <div className="capitalize flex justify-center">
-          {atl ? usdPriceFormatter.format(atl) : ""}
+          {atl ? usdPriceAllTimeFormatter.format(atl) : ""}
         </div>
       );
     },
@@ -121,8 +108,17 @@ export const columns: ColumnDef<Coin>[] = [
           : percentChange < 0
           ? "text-red-500"
           : "";
+      const icon =
+        percentChange > 0 ? (
+          <AiFillCaretUp />
+        ) : percentChange < 0 ? (
+          <AiFillCaretDown />
+        ) : null;
       return (
-        <div className={`capitalize flex justify-center ${textColor}`}>
+        <div
+          className={`capitalize flex justify-center items-center ${textColor}`}
+        >
+          {icon}
           {price_change_percentage_1h_in_currency
             ? percentFormatter.format(
                 price_change_percentage_1h_in_currency / 100
@@ -147,8 +143,17 @@ export const columns: ColumnDef<Coin>[] = [
           : percentChange < 0
           ? "text-red-500"
           : "";
+      const icon =
+        percentChange > 0 ? (
+          <AiFillCaretUp />
+        ) : percentChange < 0 ? (
+          <AiFillCaretDown />
+        ) : null;
       return (
-        <div className={`capitalize flex justify-center ${textColor}`}>
+        <div
+          className={`capitalize flex justify-center items-center ${textColor}`}
+        >
+          {icon}
           {price_change_percentage_24h_in_currency
             ? percentFormatter.format(
                 price_change_percentage_24h_in_currency / 100
@@ -173,8 +178,17 @@ export const columns: ColumnDef<Coin>[] = [
           : percentChange < 0
           ? "text-red-500"
           : "";
+      const icon =
+        percentChange > 0 ? (
+          <AiFillCaretUp />
+        ) : percentChange < 0 ? (
+          <AiFillCaretDown />
+        ) : null;
       return (
-        <div className={`flex justify-center capitalize ${textColor}`}>
+        <div
+          className={`capitalize flex justify-center items-center ${textColor}`}
+        >
+          {icon}
           {price_change_percentage_7d_in_currency
             ? percentFormatter.format(
                 price_change_percentage_7d_in_currency / 100
@@ -199,8 +213,17 @@ export const columns: ColumnDef<Coin>[] = [
           : percentChange < 0
           ? "text-red-500"
           : "";
+      const icon =
+        percentChange > 0 ? (
+          <AiFillCaretUp />
+        ) : percentChange < 0 ? (
+          <AiFillCaretDown />
+        ) : null;
       return (
-        <div className={`capitalize flex justify-center ${textColor}`}>
+        <div
+          className={`capitalize flex justify-center items-center ${textColor}`}
+        >
+          {icon}
           {price_change_percentage_14d_in_currency
             ? percentFormatter.format(
                 price_change_percentage_14d_in_currency / 100
@@ -225,8 +248,17 @@ export const columns: ColumnDef<Coin>[] = [
           : percentChange < 0
           ? "text-red-500"
           : "";
+      const icon =
+        percentChange > 0 ? (
+          <AiFillCaretUp />
+        ) : percentChange < 0 ? (
+          <AiFillCaretDown />
+        ) : null;
       return (
-        <div className={`capitalize flex justify-center ${textColor}`}>
+        <div
+          className={`capitalize flex justify-center items-center ${textColor}`}
+        >
+          {icon}
           {price_change_percentage_30d_in_currency
             ? percentFormatter.format(
                 price_change_percentage_30d_in_currency / 100
@@ -251,8 +283,17 @@ export const columns: ColumnDef<Coin>[] = [
           : percentChange < 0
           ? "text-red-500"
           : "";
+      const icon =
+        percentChange > 0 ? (
+          <AiFillCaretUp />
+        ) : percentChange < 0 ? (
+          <AiFillCaretDown />
+        ) : null;
       return (
-        <div className={`capitalize flex justify-center ${textColor}`}>
+        <div
+          className={`capitalize flex justify-center items-center ${textColor}`}
+        >
+          {icon}
           {price_change_percentage_200d_in_currency
             ? percentFormatter.format(
                 price_change_percentage_200d_in_currency / 100
@@ -277,8 +318,17 @@ export const columns: ColumnDef<Coin>[] = [
           : percentChange < 0
           ? "text-red-500"
           : "";
+      const icon =
+        percentChange > 0 ? (
+          <AiFillCaretUp />
+        ) : percentChange < 0 ? (
+          <AiFillCaretDown />
+        ) : null;
       return (
-        <div className={`capitalize flex justify-center ${textColor}`}>
+        <div
+          className={`capitalize flex justify-center items-center ${textColor}`}
+        >
+          {icon}
           {price_change_percentage_1y_in_currency
             ? percentFormatter.format(
                 price_change_percentage_1y_in_currency / 100

@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Stabelcoins TV",
+  title: "Stablecoins TV",
   description:
-    "USD Stablecoins table with server side sorting, pagination, and filtering",
+    "Opensource stablecoins database table with server side sorting, pagination, and filtering",
 };
 
 export default function RootLayout({

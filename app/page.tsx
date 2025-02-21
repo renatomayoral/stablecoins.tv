@@ -11,7 +11,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown, Heart } from "lucide-react";
+import { ChevronDown, Heart, Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -43,6 +43,8 @@ import { Coin } from "@/config/types";
 import Link from "next/link";
 import Image from "next/image";
 import { SkeletonTable } from "@/components/skeleton-table";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export default function Home() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -54,6 +56,8 @@ export default function Home() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [data, setData] = React.useState<Coin[]>([]); // Initialize data as an empty array
   const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [timeUntilNextFetch, setTimeUntilNextFetch] =
+    useState<string>("Calculating...");
 
   useEffect(() => {
     async function fetchCoins() {
@@ -64,16 +68,41 @@ export default function Home() {
         });
         const coinsData = await response.json();
         setData(coinsData);
+        // Calculate time for next fetch
+        const nextFetchTime = Date.now() + 600000; // 10 minutes from now
+        setTimeUntilNextFetch(getTimeRemaining(nextFetchTime));
+
+        // Set interval to update the counter every second
+        const intervalId = setInterval(() => {
+          setTimeUntilNextFetch(getTimeRemaining(nextFetchTime));
+        }, 1000);
+
+        // Clear interval on unmount
+        return () => clearInterval(intervalId);
       } catch (error) {
         console.error("Failed to fetch coins:", error);
       } finally {
         setIsLoading(false); // Set loading to false after fetching data
       }
     }
-    fetchCoins();
-    const intervalId = setInterval(fetchCoins, 600000); // Fetch data every 60 seconds
 
-    return () => clearInterval(intervalId); // Clean up interval on unmount
+    function getTimeRemaining(endTime: number): string {
+      const timeLeft = endTime - Date.now();
+
+      if (timeLeft <= 0) {
+        return "Fetching new data...";
+      }
+
+      const minutes = Math.floor((timeLeft / 60000) % 60);
+      const seconds = Math.floor((timeLeft / 1000) % 60);
+
+      return `${minutes}m ${seconds}s`;
+    }
+
+    fetchCoins();
+    const fetchIntervalId = setInterval(fetchCoins, 600000); // Fetch data every 10 minutes
+
+    return () => clearInterval(fetchIntervalId);
   }, []);
 
   const table = useReactTable({
@@ -110,7 +139,7 @@ export default function Home() {
           >
             <div className="flex items-center">
               <Image
-                src={"/Stablecoins.TV-Logo.svg"}
+                src={"/stablecoins.tv-logo.svg"}
                 alt="Stablecoins TV Logo"
                 width={150}
                 height={100}
@@ -120,43 +149,66 @@ export default function Home() {
             </div>
           </Link>
         </div>
-        <div className="flex items-center py-4">
-          <Input
-            placeholder="Filter tokens..."
-            value={
-              (table.getColumn("symbol")?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn("symbol")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <div className="flex items-center justify-between py-4">
+          <div className="flex items-center w-full space-x-2">
+            <div className="flex items-center space-x-2">
+              <Input
+                placeholder="Filter tokens..."
+                value={
+                  (table.getColumn("symbol")?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event) =>
+                  table.getColumn("symbol")?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="airplane-mode">Fiat Backed USD</Label>
+              <Switch id="airplane-mode" />
+              <Label htmlFor="airplane-mode">Crypto Backed</Label>
+            </div>
+            <div className="flex items-center space-x-2 ml-auto">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button>
+                      <Clock className="size-4 animate-spin" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Last refreshed data: {timeUntilNextFetch} ago.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    Columns <ChevronDown />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
         </div>
         <div className="rounded-md border">
           <Table>
